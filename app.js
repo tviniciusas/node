@@ -5,10 +5,12 @@ const handlebars = require('express-handlebars')
 const parser = bodyParser.urlencoded({extended:false})
 const port = 3000
 const app = express()
+
+//criando conexão mysql
 const sql = mysql.createConnection({
     host:'localhost',
     user:'root',
-    password:'damit',
+    password:'root',
     database:'node'
 })
 
