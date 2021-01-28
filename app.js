@@ -29,11 +29,10 @@ app.get("/editar/:id?",function(req, res){
 
         res.render('update',{id:req.params.id,nome:resultados[0].nome,senha:resultados[0].senha})
     })
-    res.render('update',{id:req.params.id})
 })
-app.post("/msgUpdate",parser ,function(req, res){
+app.post("/update",parser ,function(req, res){
 
-    sql.query("update user set nome =?, senha =?, where id=?",[req.params.id])
+    sql.query("update user set nome =?, senha =?, where id=?",[req.body.nome,req.body.senha,req.body.id])
     res.send('atualizado com sucesso!')
 
 })
