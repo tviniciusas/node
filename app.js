@@ -24,6 +24,19 @@ app.use('/img',express.static('img'))
 app.get("/", function(req, res){
     res.render('index')
 })
+app.get("/editar/:id?",function(req, res){
+    sql.query("select * from user where id =?",[req.params.id],function(erro,resultados,campos){
+
+        res.render('update',{id:req.params.id,nome:resultados[0].nome,senha:resultados[0].senha})
+    })
+    res.render('update',{id:req.params.id})
+})
+app.post("/msgUpdate",parser ,function(req, res){
+
+    sql.query("update user set nome =?, senha =?, where id=?",[req.params.id])
+    res.send('atualizado com sucesso!')
+
+})
 
 app.get("/select/:id?",function(req, res){
 
@@ -45,6 +58,13 @@ app.post("/msgInserir", parser, function(req, res){
 
     sql.query("insert into user values(?,?,?)",[req.body.id,req.body.nome,req.body.senha])
     res.render('msgInserir',{nome:req.body.nome})
+})
+
+app.get("/deletar/:id",function(req, res){
+
+    sql.query("delete from user where id=?",[req.params.id])
+    res.render('deletar')
+
 })
 
 //criando o serviço do servidor nodejs atraves do express
