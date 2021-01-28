@@ -5,7 +5,7 @@ const handlebars = require('express-handlebars')
 const parser = bodyParser.urlencoded({extended:false})
 const port = 3000
 const app = express()
-const SQL = mysql.createConnection({
+const sql = mysql.createConnection({
     host:'localhost',
     user:'root',
     password:'damit',
@@ -25,14 +25,26 @@ app.get("/", function(req, res){
     res.render('index')
 })
 
+app.get("/select/:id?",function(req, res){
+
+    if(!req.params.id){
+        sql.query("select * from user",function(erro,resultados,campos){
+            res.render('select',{dados:resultados})
+        })
+    }else{
+        sql.query("select * from user where id =?",[req.params.id],function(erro,resultados,campos){
+            res.render('select',{dados:resultados})
+        })
+    }
+})
+
 app.get("/inserir",function(req, res){
     res.render('inserir')
 })
 app.post("/msgInserir", parser, function(req, res){
 
-    SQL.query('insert into user values(?,?,?)',[req.body.id,req.body.nome,req.body.senha])
-    res.render('msgInserir')
-
+    sql.query("insert into user values(?,?,?)",[req.body.id,req.body.nome,req.body.senha])
+    res.render('msgInserir',{nome:req.body.nome})
 })
 
 //criando o serviço do servidor nodejs atraves do express
